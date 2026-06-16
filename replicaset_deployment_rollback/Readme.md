@@ -40,6 +40,7 @@ A **Deployment** is a higher-order controller that manages ReplicaSets and provi
 
 ### The Architecture Hierarchy
 
+```text
 +-------------------------------------------------------------+
 |                        DEPLOYMENT                           |
 |                 (Manages rollout strategy)                  |
@@ -56,7 +57,7 @@ A **Deployment** is a higher-order controller that manages ReplicaSets and provi
   |      POD      |    |      POD      |    |      POD      |
   | (Running app) |    | (Running app) |    | (Running app) |
   +---------------+    +---------------+    +---------------+
-
+```
 
 ### Why use Deployments?
 1. **Self-Healing:** Automatically replaces failed pods.
@@ -72,21 +73,29 @@ Mastering imperative commands for Deployments will save you massive amounts of t
 
 ### Imperative Creation
 Create a deployment named `web-app` using the `nginx:1.14` image with 3 replicas:
-`kubectl create deployment web-app --image=nginx:1.14 --replicas=3`
+```bash
+kubectl create deployment web-app --image=nginx:1.14 --replicas=3
+```
 
 ### Declarative Generation (The CKA Way)
 Always use `--dry-run=client -o yaml` to generate your base template:
-`kubectl create deployment web-app --image=nginx:1.14 --replicas=3 --dry-run=client -o yaml > deploy.yaml`
+```bash
+kubectl create deployment web-app --image=nginx:1.14 --replicas=3 --dry-run=client -o yaml > deploy.yaml
+```
 
 ### Scaling the Deployment
 If traffic spikes, you need to increase the replica count.
 
 **Imperative Scaling (Instant):**
-`kubectl scale deployment web-app --replicas=5`
+```bash
+kubectl scale deployment web-app --replicas=5
+```
 
 **Declarative Scaling:**
 Edit the `deploy.yaml` file, change `replicas: 5`, and apply:
-`kubectl apply -f deploy.yaml`
+```bash
+kubectl apply -f deploy.yaml
+```
 
 ---
 
@@ -100,16 +109,22 @@ A **Rolling Update** is the default deployment strategy in Kubernetes. Instead o
 
 ### Triggering an Update (Changing the Image)
 Suppose we want to upgrade our `web-app` from `nginx:1.14` to `nginx:1.16`. Use the `set image` command:
-`kubectl set image deployment/web-app nginx=nginx:1.16`
+```bash
+kubectl set image deployment/web-app nginx=nginx:1.16
+```
 *(Note: The format is `container_name=new_image_name`)*
 
 ### Monitoring the Rollout
 Check the live status of the update as pods are swapped out:
-`kubectl rollout status deployment/web-app`
+```bash
+kubectl rollout status deployment/web-app
+```
 
 ### Viewing Upgrade History
 To see all previous versions (revisions) of your deployment:
-`kubectl rollout history deployment/web-app`
+```bash
+kubectl rollout history deployment/web-app
+```
 
 > **Pro-Tip:** To make the history readable, always use `--record` when making changes (though this flag is being deprecated, it is still heavily referenced in legacy documentation), or rely on proper GitOps annotations.
 
@@ -121,14 +136,20 @@ If you accidentally deploy a broken image (e.g., `nginx:1.99-typo`), the pods wi
 
 ### Instantly Undo the Last Update
 This will revert the deployment to the immediately preceding revision:
-`kubectl rollout undo deployment/web-app`
+```bash
+kubectl rollout undo deployment/web-app
+```
 
 ### Rollback to a Specific Revision
 If you need to go back to a version from three days ago, first check the history to find the Revision number:
-`kubectl rollout history deployment/web-app`
+```bash
+kubectl rollout history deployment/web-app
+```
 
 Then rollback to that exact revision (e.g., revision 2):
-`kubectl rollout undo deployment/web-app --to-revision=2`
+```bash
+kubectl rollout undo deployment/web-app --to-revision=2
+```
 
 ---
 
@@ -136,6 +157,7 @@ Then rollback to that exact revision (e.g., revision 2):
 
 Accelerate your workflow with these essential workload controller commands:
 
+```bash
 # 1. Create a deployment and expose it simultaneously (Rare but powerful)
 kubectl create deployment web --image=nginx --port=80
 kubectl expose deployment web --port=80 --type=NodePort
@@ -154,3 +176,4 @@ kubectl rollout undo deploy/<deployment-name>
 
 # 6. Extract the YAML of a running deployment without cluster-specific junk
 kubectl get deploy <deployment-name> -o yaml > current-deploy.yaml
+```
