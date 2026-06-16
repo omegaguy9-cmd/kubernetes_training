@@ -25,10 +25,7 @@ The Certified Kubernetes Administrator (CKA) exam is a **100% performance-based*
 * **Workloads & Scheduling (15%):** Deployments, Multi-container Pod architectural patterns, Taints/Tolerations, Node Affinity, DaemonSets.
 * **Storage (10%):** PersistentVolumes (PV), PersistentVolumeClaims (PVC), StorageClasses, dynamic volume provisioning.
 
-### Realities of the Testing Environment
-* **Time Bound:** You must solve roughly **15–17 practical tasks** in **2 hours**. Operational speed and automated muscle memory are paramount.
-* **Passing Threshold:** **66%**. Partial credit (step-marking) is natively computed for partially completed tasks.
-* **Open Book Access:** You are permitted access to the official documentation at `kubernetes.io/docs` and `github.com/kubernetes` via an isolated browser tab.
+
 
 ---
 
@@ -91,7 +88,7 @@ You issue an explicit instruction directly to the API server via `kubectl` to ex
 
 ---
 
-## 5. Hands-on: Imperative Pod Creation
+## 5.Imperative Pod Creation
 
 Execute a single command to deploy an ephemeral Pod instantly into your active context:
 
@@ -107,7 +104,7 @@ kubectl get pod imperative-nginx
 
 ---
 
-## 6. Hands-on: Declarative Pod Creation
+## 6. Declarative Pod Creation
 
 The optimal CKA exam strategy blends both styles: **use imperative commands to generate accurate declarative templates**, bypass syntax risks, modify the file, and apply it.
 
@@ -117,7 +114,7 @@ Execute the imperative run command with the flags `--dry-run=client -o yaml` to 
 kubectl run declarative-nginx --image=nginx:alpine --port=80 --dry-run=client -o yaml > pod.yaml
 ```
 
-### Step 2: Review the Generated Manifest (`pod.yaml`)
+### Step 2: Reviewing of the Generated Manifest (`pod.yaml`)
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -133,19 +130,19 @@ spec:
     - containerPort: 80
 ```
 
-### Step 3: Instantiate the Resource Declaratively
-Submit the file to the cluster API control plane:
+### Step 3: Instantiating the Resource Declaratively
+Submiting the file to the cluster API control plane:
 ```bash
 kubectl apply -f pod.yaml
 ```
 
 ---
 
-## 7. Deep-Dive Workload Inspection & Diagnostics
+## 7. Workload Inspection & Diagnostics
 
 Use these vital commands to query state information, analyze runtime context, and debug infrastructure or scheduling anomalies.
 
-### View General Resource Status
+### Viewing General Resource Status
 List all running Pods within your active namespace:
 ```bash
 kubectl get pods
@@ -195,3 +192,7 @@ k run fast-pod --image=redis $do > redis-pod.yaml
 # 3. Clean, zero-grace-period aggressive deletion command:
 k delete pod <pod-name> --force --grace-period=0
 ```
+
+git add .
+git commit -m "Add Pods_in_Kubernetes notes"
+git push origin main
